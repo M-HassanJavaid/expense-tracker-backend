@@ -20,9 +20,16 @@ app.get('/' , (req ,res)=>{
     res.send('HEllo from express')
 });
 
-connectDB()
-.then(()=>{
+// Connect to database
+connectDB().catch(err => {
+    console.error('Database connection failed:', err);
+});
+
+// Only listen if not in serverless environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     app.listen(PORT , ()=>{
         console.log(`Server is running on http://localhost:${PORT}`)
     })
-})
+}
+
+module.exports = app;
