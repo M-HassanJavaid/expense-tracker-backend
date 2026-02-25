@@ -3,33 +3,39 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const PORT = process.env.PORT || 5000;
-const connectDB = require('./config/db.js')
+const connectDB = require('./config/db.js');
+const dns = require('node:dns');
+const { authRouter } = require('./routes/authRoutes.js');
+dns.setServers(['1.1.1.1', '8.8.8.8']);
+const cookieParser = require('cookie-parser');
+const transactionRouter = require('./routes/transactionRoute.js');
+const checkAuth = require('./middlewares/authMiddleware.js');
+const dashboradRouter = require('./routes/dashboardRoute.js');
 
 
 const app = express();
-
 app.use(cors({
     origin: process.env.CLIENT_URL || '*',
-    methods: ["GET" , "POST" , "PUT" , "DELETE"],
-    allowedHeaders:  ["Content-Type" , "Authorization"]
+    // methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
 }));
 
 app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/' , (req ,res)=>{
+app.get('/', (req, res) => {
     res.send('HEllo from express')
 });
 
+app.use('/api/v1/auth' , authRouter);
+app.use('/api/v1/transaction' , checkAuth , transactionRouter);
+app.use('/api/v1/dashboard' , checkAuth , dashboradRouter)
+
 // Connect to database
-connectDB().catch(err => {
-    console.error('Database connection failed:', err);
-});
-
-// Only listen if not in serverless environment
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-    app.listen(PORT , ()=>{
-        console.log(`Server is running on http://localhost:${PORT}`)
+connectDB()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`)
+        })
     })
-}
-
-module.exports = app;
