@@ -13,9 +13,11 @@ async function checkAuth(req, res, next) {
         };
 
         const decode = jwt.verify(token, process.env.JWT_SECRET);
+        console.log('deconde')
+        console.log(decode)
 
         if (!(decode.isVerified)) {
-            return res.status(401).json({
+            return res.status(200).json({
                 success: false,
                 message: 'You are not verified!',
                 isLogin : true,
@@ -23,7 +25,9 @@ async function checkAuth(req, res, next) {
             })
         }
 
-        req.user = decode; // ✅ now you can access req.user in protected routes
+        req.user = decode;
+        
+        console.log(req.user)// ✅ now you can access req.user in protected routes
 
         next();
     } catch (error) {

@@ -3,6 +3,11 @@ const streamifier = require('streamifier');
 
 const cloudinaryUpload = (fileBuffer, options = {}) => {
   return new Promise((resolve, reject) => {
+    // Validate buffer exists
+    if (!fileBuffer) {
+      return reject(new Error('File buffer is required for upload'));
+    }
+
     const uploadStream = cloudinary.uploader.upload_stream(
       options,
       (error, result) => {

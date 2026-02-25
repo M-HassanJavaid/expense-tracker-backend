@@ -40,10 +40,18 @@ async function signup(req, res) {
         });
 
         if (req.file && req.file.buffer) {
-            let res = await cloudinaryUpload(req.file.buffer, { folders: 'expenseTracker' });
-            newUser.image = {};
-            newUser.image.url = res.secure_url;
-            newUser.image.id = res.public_id
+            try {
+                let cloudinaryRes = await cloudinaryUpload(req.file.buffer, { folders: 'expenseTracker' });
+                newUser.image = {};
+                newUser.image.url = cloudinaryRes.secure_url;
+                newUser.image.id = cloudinaryRes.public_id
+            } catch (uploadError) {
+                console.error('Cloudinary upload error:', uploadError);
+                return res.status(400).json({
+                    success: false,
+                    message: 'Error uploading profile image: ' + uploadError.message
+                })
+            }
         }
 
         let savedUser = await newUser.save();

@@ -4,7 +4,7 @@ const User = require("../Models/User");
 
 async function addTransaction(req, res) {
     try {
-        let { source, value, date, icon, description, action } = req.body;
+        let { source, value, date, icon = '📌', description, action } = req.body;
 
         if (!source, !value, !date, !action) {
             return res.status(400).json({
@@ -12,10 +12,6 @@ async function addTransaction(req, res) {
                 message: 'One or more field missing'
             })
         }
-
-        console.log(action)
-
-        console.log(icon)
 
         if (!(['income', 'expense'].includes(action))) {
             return res.status(400).json({
@@ -30,10 +26,10 @@ async function addTransaction(req, res) {
             source,
             value,
             user: req.user.userId,
-            icon,
+            icon ,
             date: new Date(date).toISOString(),
             description,
-            action
+            action 
         });
 
         console.log(newTransaction.icon)

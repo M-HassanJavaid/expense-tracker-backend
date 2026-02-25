@@ -23,8 +23,8 @@ const transactionSchema = new mongoose.Schema({
     },
 
     icon: {
+        type: String,
         default: '📌',
-        type: String
     },
 
     action: {
