@@ -178,7 +178,7 @@ async function sendVerificationEmail(req, res) {
             from: `"Expense Tracker" <${process.env.EMAIL_USER}>`,
             to: user.email,
             subject: "Verify your account",
-            html: getVerficationTemp(`http://localhost:8080/api/v1/auth/markVerify?token=${emailVerificationToken}`)
+            html: getVerficationTemp(`https://expense-tracker-backend-mu-five.vercel.app/api/v1/auth/markVerify?token=${emailVerificationToken}`)
         });
 
         return res.status(200).json({
