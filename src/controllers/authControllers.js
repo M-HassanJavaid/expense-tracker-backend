@@ -76,7 +76,8 @@ async function login(req, res) {
     try {
         let { email, password } = req.body || {};
 
-        if (!email, !password) {
+        // ensure both email and password are provided
+        if (!email || !password) {
             return res.status(400).json({
                 success: false,
                 message: "One or more field is missing."
@@ -231,11 +232,16 @@ async function isLogin(req, res) {
 
 
 function logout(req, res) {
-    res.clearCookie('token');
-    res.json({
+    console.log('logout recieved')
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none'
+    });
+    res.status(200).json({
         success: true,
         message: 'User has logout successfully'
-    })
+    });
 }
 
 module.exports = {
