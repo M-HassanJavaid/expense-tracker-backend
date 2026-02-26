@@ -205,7 +205,7 @@ async function markUserVerify(req, res) {
         user.isVerified = true;
         await user.save();
 
-        res.redirect('http://localhost:5173/login');
+        res.redirect(`${process.env.CLIENT_URL}/login`);
 
     } catch (error) {
         res.send(error.message)
