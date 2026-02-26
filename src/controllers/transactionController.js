@@ -74,13 +74,16 @@ async function deleteTransaction(req, res) {
                 message: 'Invalid transaction id'
             })
         }
+        
+        let user = await User.findById(req.user.userId);
+        user.totalBalance = Number(user.totalBalance) - Number(isDelete.value);
+        await user.save();
 
-        console.log(isDelete)
-
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
             message: `Transaction: ${isDelete.action} has deleted successfully`
         })
+
 
     } catch (error) {
         return res.status(500).json({
