@@ -14,10 +14,7 @@ const dashboradRouter = require('./routes/dashboardRoute.js');
 
 
 const app = express();
-app.use(cors({
-    origin: ['https://expense-tracker-frontend-eight-tau.vercel.app/'],
-    credentials: true
-}));
+app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser());
