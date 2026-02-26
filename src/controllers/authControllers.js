@@ -110,7 +110,10 @@ async function login(req, res) {
         }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
         res.cookie("token", token, {
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: true,          // REQUIRED in production (HTTPS)
+            sameSite: "none",
         });
 
         delete user.password
@@ -212,7 +215,7 @@ async function markUserVerify(req, res) {
     }
 };
 
-async function isLogin(req , res) {
+async function isLogin(req, res) {
 
     console.log(req.user);
 
@@ -227,7 +230,7 @@ async function isLogin(req , res) {
 }
 
 
-function logout(req , res) {
+function logout(req, res) {
     res.clearCookie('token');
     res.json({
         success: true,
