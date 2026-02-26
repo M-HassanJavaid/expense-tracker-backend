@@ -11,7 +11,7 @@ authRouter.post('/login' , login);
 authRouter.put('/GetVerificationEmail'  , sendVerificationEmail );
 authRouter.get('/markVerify' , markUserVerify)
 authRouter.get('/isLogin' , checkAuth,  isLogin);
-authRouter.put('/logout' , logout)
+authRouter.put('/logout' , logout);
 
 
 module.exports = {

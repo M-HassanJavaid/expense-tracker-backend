@@ -9,7 +9,6 @@ require('dotenv').config()
 async function signup(req, res) {
     try {
         let { email, password, name } = req.body;
-        console.log(req.body)
 
         if (!email || !password || !name) {
             return res.status(400).json({
@@ -114,11 +113,14 @@ async function login(req, res) {
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
+        delete user.password
+
         res.status(200).json({
             success: true,
             message: 'User has successfully login.',
             user
         })
+
 
     } catch (error) {
 
@@ -203,7 +205,7 @@ async function markUserVerify(req, res) {
         user.isVerified = true;
         await user.save();
 
-        res.redirect('https://www.google.com/?verified=true');
+        res.redirect('http://localhost:5173/login');
 
     } catch (error) {
         res.send(error.message)
@@ -212,12 +214,14 @@ async function markUserVerify(req, res) {
 
 async function isLogin(req , res) {
 
-    console.log(req.user)
+    console.log(req.user);
+
+    let user = await User.findById(req.user.userId).select('-password')
 
     res.status(200).json({
         success: true,
         isLogin: true,
-        user: req.user
+        user
     })
 
 }
