@@ -54,6 +54,7 @@ async function signup(req, res) {
         }
 
         let savedUser = await newUser.save();
+        savedUser.toObject();
         delete savedUser.password;
 
         res.status(200).json({
@@ -117,6 +118,7 @@ async function login(req, res) {
             sameSite: "none",
         });
 
+        user.toObject();
         delete user.password
 
         res.status(200).json({
